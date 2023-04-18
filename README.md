@@ -50,4 +50,24 @@ Desde el punto de vista de ingeniería, se podría usar un cluster de Hadoop par
 
 Las anteriores consideraciones se hacen desde el punto de vista de la rigurosidad estadística y desde la escalabilidad de la solución para una mayor cantidad de datos.
 
+En este punto quisiera mencionar que no se realizó un análisis exploratorio estándar como generalmente se hace con otro tipo de data donde se constribuyen plots de distribución de frecuencias y demás gráficos vistosos porque no se consideró necesario, más allá de los hallazgos que se plasmaron en el notebook.
+
 ## API para consulta
+
+Como ya se mencionó, se dispuso la data en un txt en github con el fin de disponibilizarla para el consumo de la API. Se utiliza el servicio Azure Functions para hostear la API pues el servicio es útil para implementar y ejecutar funciones sin servidor como la de la API. Cada función de Azure Functions se convierte en un endpoint y se ejecuta respondiendo a los eventos que en este caso son solicitudes HTTP. El código se encuentra en el repositorio bajo el nombre `_init_.py`. Allí se define una función asíncrona de Azure Functions que se activa mediante una solicitud HTTP y va a devolver información sobre un experimento y un día específicos.  
+
+Se define una función asíncrona llamada `main` que toma una solicitud HTTP, se define la URL que apunta al .txt, se obtienen los parámetros de `experiment_id` y `day` de la solicitud HTTP. Es necesario tener en cuenta que en este caso el `experiment_id` será el nombre del experimento ya que en el subset inicial la tupla solo tenía nombre del experimento y variante. Se lee el archivo con `requests`, se convierte en pandas, se filtra el dataframe para mostrar las filas que coinciden con los parámetros de la solicitud, si no se encuentra un resultado se devuelve un error 404 y si se encuentra un resultado, se crea un diccionario con la información del total de participantes, la variante ganadora de acuerdo con las pruebas , la lista de variantes con sus ids y la cantidad de compras en cada variante. Ese diccionario se convierte en JSON y devuelve la respuesta HTTP con el código 200. Si ocurre un error en la consulta, devuelve la respuesta HTTP con código 500.
+
+Para esto se debe descarga una extensión de azure en visual code, crear una nueva función, se configura y por defecto crea la estructura, luego en el archivo `_init_.py` de la estructura se coloca el código de la API y se despliega para obtener la URL de la API que se dispone a continuación:
+
+https://meliproject.azurewebsites.net/api/meliproject?experiment_id={vip/showV2V3BoxMessages&day=2021-08-02%2023
+
+Solo se cambia el experiment_id y el day para obtener los resultados del experimento en ese día específico. El siguiente es un ejemplo de una consulta con la API:
+
+![image](https://user-images.githubusercontent.com/65421047/232831007-91f6098b-b937-4336-8089-6aa327693ed9.png)
+
+La URL pública estará activa siempre y cuando la function esté activa en Azure.
+
+
+
+
