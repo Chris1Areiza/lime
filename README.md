@@ -10,6 +10,8 @@
 
 * [API para consulta](#API-para-consulta)
 
+* [BigQuery](#BigQuery)
+
 ## Diseño experimental e hipótesis
 
 Cuando tenemos experimentos con dos variantes se establecen pruebas de hipótesis de dos colas, esto con el fin de establecer si existen diferencias significativas entre las medias de las compras por variante. 
@@ -67,6 +69,13 @@ Solo se cambia el experiment_id y el day para obtener los resultados del experim
 ![image](https://user-images.githubusercontent.com/65421047/232831007-91f6098b-b937-4336-8089-6aa327693ed9.png)
 
 La URL pública estará activa siempre y cuando la function esté activa en Azure.
+
+## BigQuery
+
+En este apartado adjunto la evidencia de la carga de datos en una tabla en BigQuery.
+
+![image](https://user-images.githubusercontent.com/65421047/232833662-b69ef9c3-f5bf-4845-9c16-42f7e0814e62.png)
+
 
 
 
